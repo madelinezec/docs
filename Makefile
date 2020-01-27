@@ -78,6 +78,25 @@ stage: ## Host online for review
 	mut-publish build/${GIT_BRANCH}/html ${STAGING_BUCKET} --prefix=${PROJECT} --stage ${ARGS}
 	@echo "Hosted at ${STAGING_URL}/${USER}/${GIT_BRANCH}/index.html"
 
+stagel: 
+	git clone --quiet https://github.com/madelinezec/test-submodules.git build_scripts
+	@ cd build_scripts && npm list mongodb || npm install mongodb
+	@ source ~/.config/.snootyenv && node build_scripts/app.js $(filter-out $@,$(MAKECMDGOALS))
+	@ rm -rf build_scripts
+
+commit:
+        @:
+
+local:
+        @:
+
+repo:
+        @:
+
+world:
+        @:
+
+
 # - Enter build/public/<branch>, as well as any symbolic links pointing
 #   to it, and recurse over each file <basename>/<filename>.
 #   * Upload each to the S3 bucket under <project>/<basename>/<filename>.
