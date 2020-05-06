@@ -127,6 +127,29 @@ you may prefer to include a pause in-between iterations.
 Alternatively, to mitigate the impact of :dbcommand:`cleanupOrphaned`,
 you may prefer to run the command at off peak hours.
 
+It is also possible to tune the performance impact of
+:dbcommand:`cleanupOrphaned` with the parameters,
+:parameter:`rangeDeleterBatchSize` and
+:parameter:`rangeDeleterBatchDelayMS`. For example:
+
+- To limit the number of documents deleted per batch, you can set
+  :parameter:`rangeDeleterBatchSize` to a small value such as ``32``.
+
+- To add an additional delay between batch deletions, you can set
+  :parameter:`rangeDeleterBatchDelayMS` above the current default of
+  ``20`` milliseconds.
+
+.. note::
+
+   Changing :parameter:`rangeDeleterBatchSize` and
+   :parameter:`rangeDeleterBatchDelayMS` affect all range deletion,
+   including during normal :ref:`chunk
+   migration <chunk-migration-procedure>`.
+
+   If you are temporarily modifying one or both of these parameters to
+   run :dbcommand:`cleanupOrphaned`, return to their previous values
+   after you run :dbcommand:`cleanupOrphaned`.
+
 .. _cleanupOrphaned-determine-range:
 
 Determine Range

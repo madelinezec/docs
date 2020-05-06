@@ -28,6 +28,13 @@ Sharding Commands
 
      - Associates a shard with a :term:`zone`. Supports configuring :ref:`zones <zone-sharding>` in sharded clusters.
 
+   * - :dbcommand:`balancerCollectionStatus`
+
+     - Returns information on whether the chunks of a sharded
+       collection are balanced.
+       
+       .. versionadded:: 4.4
+
    * - :dbcommand:`balancerStart`
 
      - Starts a balancer thread.
@@ -92,6 +99,13 @@ Sharding Commands
 
      - Provides the ability to combine chunks on a single shard.
 
+   * - :dbcommand:`refineCollectionShardKey`
+
+     - Refines a collection's shard key by adding a suffix to the
+       existing key.
+
+       .. versionadded:: 4.4
+
    * - :dbcommand:`removeShard`
 
      - Starts the process of removing a shard from a sharded cluster.
@@ -139,6 +153,7 @@ Sharding Commands
 
    /reference/command/addShard
    /reference/command/addShardToZone
+   /reference/command/balancerCollectionStatus
    /reference/command/balancerStart
    /reference/command/balancerStatus
    /reference/command/balancerStop
@@ -155,6 +170,7 @@ Sharding Commands
    /reference/command/moveChunk
    /reference/command/movePrimary
    /reference/command/mergeChunks
+   /reference/command/refineCollectionShardKey
    /reference/command/removeShard
    /reference/command/removeShardFromZone
    /reference/command/setShardVersion

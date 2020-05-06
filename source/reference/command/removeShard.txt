@@ -30,9 +30,14 @@ against the ``admin`` database:
 Behavior
 --------
 
-You can only remove one shard at a time.
-:dbcommand:`removeShard` returns an error if an existing
-:dbcommand:`removeShard` operation is in progress.
+Concurrent ``removeShard`` Operations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Starting in MongoDB 4.4, you can have more than one
+:dbcommand:`removeShard` operation in progress.
+
+In MongoDB 4.2 and earlier, :dbcommand:`removeShard` returns an error
+if another :dbcommand:`removeShard` operation is in progress.
 
 Access Requirements
 ~~~~~~~~~~~~~~~~~~~
@@ -54,6 +59,8 @@ Chunk Balancing
 ~~~~~~~~~~~~~~~
 
 .. include:: /includes/fact-remove-shard-balance-order.rst
+
+.. seealso:: :dbcommand:`balancerCollectionStatus`
 
 Write Concern
 ~~~~~~~~~~~~~
@@ -171,6 +178,12 @@ In the output, the ``remaining`` field includes the following fields:
        ``jumboChunks`` remain on the shard. Once only the jumbo chunks
        remain, you must manually clear the jumbo flag before the
        draining can complete. See :doc:`/tutorial/clear-jumbo-flag`.
+
+       After the ``jumbo`` flag clears, the balancer can migrate these
+       chunks. However, if the queue of writes
+       that modify any documents being migrated surpasses 500MB of
+       memory the migration will fail. For details on the migration
+       procedure, see :ref:`chunk-migration-procedure`.
 
        *Available starting in 4.2.2 (and 4.0.14)*
 

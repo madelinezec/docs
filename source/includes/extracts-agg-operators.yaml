@@ -729,7 +729,9 @@ content: |
 
       * - :expression:`$meta`
 
-        - Access text search metadata.
+        - Access available per-document metadata related to the
+          aggregation operation.
+        
 ---
 ref: agg-operators-variable-project
 content: |
@@ -766,7 +768,30 @@ content: |
           aggregation pipeline may interpret as an expression. For
           example, use a :expression:`$literal` expression to a string
           that starts with a ``$`` to avoid parsing as a field path.
-  
+---
+ref: agg-operators-custom-aggregation
+content: |
+
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 80
+
+      * - Name
+        - Description
+
+      * - :group:`$accumulator`
+
+        - Defines a custom accumulator function.
+
+          .. versionadded:: 4.4
+
+      * - :expression:`$function`
+
+        - Defines a custom function.
+
+          .. versionadded:: 4.4
+
 ---
 ref: agg-operators-type
 content: |
@@ -861,6 +886,10 @@ content: |
 
       * - Name
         - Description
+
+      * - :group:`$accumulator`
+
+        - Returns the result of a user-defined accumulator function.
 
       * - :group:`$addToSet`
 

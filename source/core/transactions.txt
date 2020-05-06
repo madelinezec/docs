@@ -98,7 +98,7 @@ of the transactions API:
          final MongoClient client = MongoClients.create(uri);
           
          /*
-             Prereq: Create collections. CRUD operations in transactions must be on existing collections.
+             Create collections:
           */
           
          client.getDatabase("mydb1").getCollection("foo")
@@ -252,8 +252,42 @@ of the transactions API:
          :end-before: End Transactions withTxn API Example 1
 
    .. tab::
+      :tabid: cpp
+
+      The example uses the new callback API for working with
+      transactions, which starts a transaction, executes the
+      specified operations, and commits (or aborts on error). The
+      new callback API also incorporates retry logic for
+      ``TransientTransactionError`` or
+      ``UnknownTransactionCommitResult`` commit errors.
+
+      .. important::
+      
+         - For transactions on MongoDB 4.2 deployments (replica
+           sets and sharded clusters), clients :red:`must` use
+           MongoDB drivers updated for MongoDB 4.2.
+
+         - When using the drivers, each operation in the
+           transaction must be associated with the session (i.e.
+           pass in the session to each operation).
+
+
+      .. literalinclude:: /driver-examples/cpp-with-transaction.cpp
+         :language: cpp
+         :dedent: 4
+         :start-after: Start Transactions withTxn API Example 1
+         :end-before: End Transactions withTxn API Example 1
+
+   .. tab::
       :tabid: motor
        
+      The example uses the new callback API for working with
+      transactions, which starts a transaction, executes the
+      specified operations, and commits (or aborts on error). The
+      new callback API incorporates retry logic for
+      :ref:`transient-transaction-error` or
+      :ref:`unknown-transaction-commit-result` commit errors.
+
       .. important::
 
          - For transactions on MongoDB 4.2 deployments (replica
@@ -264,6 +298,15 @@ of the transactions API:
            transaction must be associated with the session (i.e.
            pass in the session to each operation).
 
+      .. literalinclude:: /driver-examples/test_examples_motor.py
+         :language: python
+         :dedent: 8
+         :start-after: Start Transactions withTxn API Example 1
+         :end-before: End Transactions withTxn API Example 1
+
+   .. tab::
+      :tabid: ruby
+
       The example uses the new callback API for working with
       transactions, which starts a transaction, executes the
       specified operations, and commits (or aborts on error). The
@@ -271,12 +314,87 @@ of the transactions API:
       :ref:`transient-transaction-error` or
       :ref:`unknown-transaction-commit-result` commit errors.
 
-      .. class:: copyable-code
-      .. literalinclude:: /driver-examples/test_examples_motor.py
-         :language: python
-         :dedent: 8
+      .. important::
+
+         - For transactions on MongoDB 4.2 deployments (replica
+           sets and sharded clusters), clients :red:`must` use
+           MongoDB drivers updated for MongoDB 4.2.
+      
+         - When using the drivers, each operation in the
+           transaction must be associated with the session (i.e.
+           pass in the session to each operation).
+
+      .. literalinclude:: /driver-examples/with_transactions_examples_spec.rb
+         :language: ruby
+         :dedent: 4
          :start-after: Start Transactions withTxn API Example 1
          :end-before: End Transactions withTxn API Example 1
+
+
+   .. tab::
+      :tabid: go
+
+      The example uses the new callback API for working with
+      transactions, which starts a transaction, executes the
+      specified operations, and commits (or aborts on error). The
+      new callback API incorporates retry logic for
+      :ref:`transient-transaction-error` or
+      :ref:`unknown-transaction-commit-result` commit errors.
+
+      .. important::
+
+         - For transactions on MongoDB 4.2 deployments (replica
+           sets and sharded clusters), clients :red:`must` use
+           MongoDB drivers updated for MongoDB 4.2.
+      
+         - When using the drivers, each operation in the
+           transaction must be associated with the session (i.e.
+           pass in the session to each operation).
+
+      .. literalinclude:: /driver-examples/go_examples.go
+         :language: go
+         :start-after: Start Transactions withTxn API Example 1
+         :end-before: End Transactions withTxn API Example 1
+
+   .. tab::
+      :tabid: perl
+ 
+      This example uses the :ref:`core API <txn-core-api>`. Because the
+      core API does not incorporate retry logic for
+      :ref:`transient-transaction-error` or
+      :ref:`unknown-transaction-commit-result` commit errors, the
+      example includes explicit logic to retry the transaction for these
+      errors:
+
+      .. important::
+
+         To associate read and write operations with a transaction, you **must**
+         pass the session to each operation in the transaction.
+
+      .. literalinclude:: /driver-examples/perl-transactions-examples.t
+         :language: perl
+         :start-after: Start Transactions Retry Example 3
+         :end-before: End Transactions Retry Example 3
+
+   .. tab::
+      :tabid: scala
+
+      This example uses the :ref:`core API <txn-core-api>`. Because the
+      core API does not incorporate retry logic for
+      :ref:`transient-transaction-error` or
+      :ref:`unknown-transaction-commit-result` commit errors, the
+      example includes explicit logic to retry the transaction for
+      these errors:
+
+      .. important::
+
+         To associate read and write operations with a transaction, you **must**
+         pass the session to each operation in the transaction.
+
+      .. literalinclude:: /driver-examples/DocumentationTransactionsExampleSpec.scala
+         :language: scala
+         :lines: 50-
+
 
 .. seealso::
 
@@ -342,10 +460,7 @@ For transactions:
 
 .. include:: /includes/extracts/transactions-operations-crud.rst
 
-Operations that affect the database catalog, such as creating or
-dropping a collection or an index, are not allowed in
-transactions. For example, a transaction cannot include an insert
-operation that would result in the creation of a new collection. See
+For a list of operations not supported in transactions, see
 :ref:`transactions-ops-restricted`.
 
 .. include:: /includes/extracts/transactions-operations-catalog-tip.rst
@@ -353,6 +468,38 @@ operation that would result in the creation of a new collection. See
 .. seealso::
 
    - :doc:`Transactions and Operations Reference </core/transactions-operations>`
+
+.. _transactions-create-collections-indexes:
+
+Create Collections and Indexes In a Transaction
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. versionadded:: 4.4
+
+When using :ref:`feature compatibility version (fcv) <view-fcv>`
+``"4.4"`` or greater, you can create a collection and index
+within a transaction. Specifically, you can:
+
+.. include:: /includes/extracts/transactions-4.4-allowed-operations.rst
+
+When using fcv ``"4.2"`` or less, no operations that affect the
+database catalog, such as creating or dropping a collection or an index,
+are allowed in transactions.
+
+Restrictions
+````````````
+
+- .. include:: /includes/extracts/transactions-cross-shard-collection-restriction.rst
+
+- You can only run the :method:`~db.createCollection()` and
+  :method:`~db.collection.createIndex()` methods when using read
+  concern level of :readconcern:`"local"`. If you specify a read
+  concern level other than :readconcern:`"local"`, the transaction
+  fails.
+
+.. seealso::
+
+   :ref:`transactions-ops-restricted`
 
 .. _transactions-ops-count:
 
@@ -508,6 +655,17 @@ Transactions support the following read concern levels:
    - For transactions on sharded clusters, the
      :readconcern:`"snapshot"` view of the data **is** synchronized
      across shards.
+
+Collection and Index Creation Read Concern
+``````````````````````````````````````````
+
+.. versionchanged:: 4.4
+
+You can only run the :method:`~db.createCollection()` and
+:method:`~db.collection.createIndex()` methods in transactions when
+using read concern level of :readconcern:`"local"`. If you specify a
+read concern level other than :readconcern:`"local"`, the transaction
+fails.
 
 .. _transactions-write-concern:
 

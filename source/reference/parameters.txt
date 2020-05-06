@@ -251,6 +251,39 @@ Authentication Parameters
    start-up, and cannot change this setting with the
    :dbcommand:`setParameter` database command.
 
+.. parameter:: ocspEnabled
+
+   .. versionadded:: 4.4
+
+   *Default*: true
+
+   The flag that enables or disables OCSP.
+
+   You can only set :parameter:`ocspEnabled` during startup in the
+   :setting:`configuration file <setParameter>` or with the
+   ``--setParameter`` option on the command line. For example, the
+   following disables OCSP:
+
+   .. code-block:: sh
+
+      mongod --setParameter ocspEnabled=false ...
+
+.. parameter:: ocspValidationRefreshPeriodSecs
+
+   .. versionadded:: 4.4
+
+   The number of seconds to wait before refreshing the stapled OCSP
+   status response. Specify a number greater than or equal to 1.
+
+   You can only set :parameter:`ocspEnabled` during startup in the
+   :setting:`configuration file <setParameter>` or with the
+   ``--setParameter`` option on the command line. For example, the
+   following sets the parameter to 3600 seconds:
+
+   .. code-block:: sh
+
+      mongod --setParameter ocspValidationRefreshPeriodSecs=3600 ...
+
 .. parameter:: opensslCipherConfig
 
    .. versionadded:: 3.6
@@ -849,21 +882,23 @@ General Parameters
 
 .. parameter:: failIndexKeyTooLong
 
-   |mongod-only|
+   *Removed in 4.4*
 
-   .. versionchanged:: 4.2
+   .. important::
 
-      - MongoDB removes the :limit:`Index Key Limit` for
+      - **MongoDB 4.4** *removes* the deprecated
+        :parameter:`failIndexKeyTooLong` parameter. Attempting to use
+        this parameter with MongoDB 4.4 will result in an error.
+
+      - **MongoDB 4.2** *deprecates* the
+        :parameter:`failIndexKeyTooLong` parameter and *removes* the
+        :limit:`Index Key Length Limit <Index Key Limit>` for 
         :ref:`featureCompatibilityVersion <view-fcv>` (fCV) set to
         ``"4.2"`` or greater.
 
-      - In concert with the removal of the limit,
-        :parameter:`failIndexTooLong` only applies for MongoDB 2.6
-        through MongoDB versions with :ref:`featureCompatibilityVersion
-        <view-fcv>` (fCV) set to ``"4.0"`` or earlier.
-
    For MongoDB 2.6 through MongoDB versions with
-   ``featureCompatibilityVersion`` (fCV) set to ``"4.0"`` or earlier,
+   :ref:`featureCompatibilityVersion
+   <view-fcv>` (fCV) set to ``"4.0"`` or earlier,
    :limit:`Index Key Length Limit <Index Key Limit>` applies. If you
    attempt to insert or update a document whose index field exceeds
    the :limit:`Index Key Length Limit <Index Key Limit>`, the operation
@@ -875,15 +910,13 @@ General Parameters
    upgrade and then gradually resolve these indexing issues, you can
    use :parameter:`failIndexKeyTooLong` to disable this behavior.
 
-   .. important::
-
-      Setting :parameter:`failIndexKeyTooLong` to ``false`` is
-      a temporary workaround, not a permanent solution to the
-      problem of oversized index keys. With
-      :parameter:`failIndexKeyTooLong` set to ``false``, queries can
-      return incomplete results if they use indexes that skip over
-      documents whose indexed fields exceed the
-      :limit:`Index Key Length Limit <Index Key Limit>`.
+   Setting :parameter:`failIndexKeyTooLong` to ``false`` is
+   a temporary workaround, not a permanent solution to the
+   problem of oversized index keys. With
+   :parameter:`failIndexKeyTooLong` set to ``false``, queries can
+   return incomplete results if they use indexes that skip over
+   documents whose indexed fields exceed the
+   :limit:`Index Key Length Limit <Index Key Limit>`.
 
    :parameter:`failIndexKeyTooLong` defaults to ``true``.
 
@@ -900,6 +933,51 @@ General Parameters
    .. code-block:: sh
 
       mongod --setParameter failIndexKeyTooLong=false
+
+.. parameter:: maxValidateMBperSec
+
+   *Default*: 0
+
+   |mongod-only|
+
+   Specifies the maximum amount of data (in megabyte) processed per
+   second by the :dbcommand:`validate` operation run with
+   :ref:`background: true <cmd-validate-background>`.
+
+   Acceptable values are integers greater than or equal to ``0``, where
+   the default ``0`` indicates no throttling limit.
+
+   .. note::
+
+      - The :parameter:`maxValidateMBperSec` applies separately to each
+        background validation that may be running concurrently.
+
+      - If a background validation is in progress, the operation will
+        apply any changes to the :parameter:`maxValidateMBperSec` value.
+
+      - The parameter does not apply to :dbcommand:`validate`
+        operations run without :ref:`background: true
+        <cmd-validate-background>`.
+        
+      - For in-progress validate operations, the :pipeline:`$currentOp`
+        aggregation stage and the :dbcommand:`currentOp` command
+        include :data:`~$currentOp.dataThroughputAverage` and
+        :data:`~$currentOp.dataThroughputLastSecond` information.
+
+   The following example sets :parameter:`maxValidateMBperSec` to
+   ``10``:
+
+   .. code-block:: javascript
+
+      db.adminCommand( { setParameter: 1, maxValidateMBperSec: 10 } )
+
+   You can also set :parameter:`maxValidateMBPerSec` at startup:
+
+   .. code-block:: sh
+
+      mongod --setParameter maxValidateMBperSec=10
+   
+   .. versionadded:: 4.4
 
 .. parameter:: notablescan
 
@@ -1114,7 +1192,11 @@ General Parameters
 
    .. versionadded:: 3.4
 
-   *Default*: 500
+   *Default*: 
+
+   - 200 (For versions 4.2.3 and later)
+
+   - 500 (For versions 4.2.2 and earlier)
 
    Limits the amount of memory that simultaneous index
    builds on one collection may consume for the duration of the
@@ -1253,7 +1335,7 @@ General Parameters
    Specifies the tcmalloc release rate (`TCMALLOC_RELEASE_RATE
    <https://gperftools.github.io/gperftools/tcmalloc.html#runtime>`_).
    Per https://gperftools.github.io/gperftools/tcmalloc.html#runtime
-   TCMALLOC_RELEASE_RATE is describeds as:
+   TCMALLOC_RELEASE_RATE is described as:
 
    .. epigraph::
 
@@ -1921,6 +2003,63 @@ Replication Parameters
    The specified value must be greater than or equal to 0, with 0 to
    disable warnings. 
    
+.. parameter:: initialSyncTransientErrorRetryPeriodSeconds
+
+   .. versionadded:: 4.4
+
+   *Type*: integer
+
+   *Default*: 86400
+
+   The amount of time in seconds a secondary performing initial sync 
+   attempts to resume the process if interrupted by a transient 
+   network error. The default value is equivalent to 24 hours.
+
+.. parameter:: initialSyncSourceReadPreference
+
+   .. versionadded:: 4.4
+
+   *Type*: String
+
+   |mongod-only| 
+
+   The preferred source for performing :ref:`initial sync
+   <replica-set-initial-sync>`. Specify one of the following read
+   preference modes:
+
+   - :readmode:`primary`
+   - :readmode:`primaryPreferred` (Default for voting replica set members)
+   - :readmode:`secondary`
+   - :readmode:`secondaryPreferred`
+   - :readmode:`nearest` (Default for newly added *or* non-voting replica set members)
+
+   If the replica set has disabled :rsconf:`chaining
+   <settings.chainingAllowed>`, the default
+   :parameter:`initialSyncSourceReadPreference` read preference mode 
+   is :readmode:`primary`.
+
+   You cannot specify a tag set or ``maxStalenessSeconds`` to 
+   :parameter:`initialSyncSourceReadPreference`.
+
+   If the :binary:`~bin.mongod` cannot find a sync source based on the
+   specified read preference, it logs an error and restarts the initial
+   sync process. The :binary:`~bin.mongod` exits with an error if it
+   cannot complete the initial sync process after ``10`` attempts. For
+   more information on sync source selection, see
+   :ref:`replica-set-initial-sync-source-selection`.
+
+   :parameter:`initialSyncSourceReadPreference` takes precedence over
+   the replica set's :rsconf:`settings.chainingAllowed` setting when
+   selecting an initial sync source. After a replica set member
+   successfully completes initial sync, it defers to the value of
+   :rsconf:`~settings.chainingAllowed` when selecting a replication sync
+   source.
+
+   You can only set this parameter on startup, using either the 
+   :setting:`setParameter`
+   configuration file setting or the 
+   :option:`--setParameter <mongod --setParameter>` command line option.
+
 .. parameter:: oplogInitialFindMaxSeconds
 
    .. versionadded:: 3.6
@@ -2104,6 +2243,171 @@ Sharding Parameters
    ``AsyncRequestsSenderUseBaton`` and always enables the performance
    enhancement controlled by the parameter.
 
+.. parameter:: enableShardedIndexConsistencyCheck
+
+   *New in version 4.4 (and 4.2.6).*
+
+   *Type*: boolean
+
+   *Default*: true
+
+   |mongod-only|
+
+   If set on the config server's primary, enables or disables the index
+   consistency check for sharded collections. The parameter has no
+   effect on the :binary:`~bin.mongod` if it is not the config server's
+   primary.
+
+   The following example sets
+   :parameter:`enableShardedIndexConsistencyCheck` to ``false`` for a
+   config server primary:
+
+   .. code-block:: javascript
+
+      mongod --setParameter enableShardedIndexConsistencyCheck=false
+
+   During runtime, you can also set the parameter with the
+   :dbcommand:`setParameter` command:
+
+   .. code-block:: sh
+
+      db.adminCommand( { setParameter: 1, enableShardedIndexConsistencyCheck: false } )
+
+   .. seealso::
+
+      - :parameter:`shardedIndexConsistencyCheckIntervalMS` parameter
+
+      - :serverstatus:`shardedIndexConsistency` metrics returned by the
+        :dbcommand:`serverStatus` command.
+
+.. parameter:: shardedIndexConsistencyCheckIntervalMS
+
+   *New in version 4.4 (and 4.2.6).*
+
+   *Type*: integer
+
+   *Default*: 600000
+
+   |mongod-only|
+
+   If set on the config server's primary, the interval, in
+   milliseconds, at which the config server's primary checks the index
+   consistency of sharded collections. The parameter has no effect on
+   the :binary:`~bin.mongod` if it is not the config server's primary.
+
+   You can only set the parameter during startup, and cannot change
+   this setting using the :dbcommand:`setParameter` database command.
+   
+   For example, the following sets the interval at 300000 milliseconds
+   (i.e. 5 minutes) at startup:
+
+   .. code-block:: javascript
+
+      mongod --setParameter shardedIndexConsistencyCheckIntervalMS=300000
+
+   .. seealso::
+
+      - :parameter:`enableShardedIndexConsistencyCheck` parameter
+
+      - :serverstatus:`shardedIndexConsistency` metrics returned by the
+        :dbcommand:`serverStatus` commandq
+
+.. parameter:: maxTimeMSForHedgedReads
+
+   .. versionadded:: 4.4
+
+   *Type*: integer
+
+   *Default*: 10
+
+   |mongos-only|
+
+   Specifies the maximimum time limit (in milliseconds) for the
+   :ref:`hedged read <mongos-hedged-reads>`. That is, the additional
+   read sent to hedge the read operation uses the ``maxTimeMS`` value
+   of :parameter:`maxTimeMSForHedgedReads` while the read operation
+   that is being hedged uses the ``maxTimeMS`` value specified for the
+   operation.
+
+   For example, to set the limit to 15 milliseconds, you can issue the
+   following during startup:
+   
+   .. code-block:: sh
+
+      mongos --setParameter maxTimeMSForHedgedReads=15
+
+   Or if using the :dbcommand:`setParameter` command in a
+   :binary:`~bin.mongo` shell connected to a running
+   :binary:`~bin.mongos`:
+
+   .. code-block:: javascript
+
+      db.adminCommand( { setParameter: 1, maxTimeMSForHedgedReads: 15 } )
+
+   .. seealso::
+
+      - :parameter:`readHedgingMode`
+
+      - :ref:`mongos-hedged-reads`
+
+.. parameter:: readHedgingMode
+
+   .. versionadded:: 4.4
+
+   *Type*: string
+
+   *Default*: on
+
+   |mongos-only|
+
+   Specifies whether :binary:`~bin.mongos` supports hedged reads for
+   those read operations whose :doc:`read preference
+   </core/read-preference>` have enabled the hedged read option.
+
+   Available values are:
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 35 85
+
+      * - Value
+        - Description
+
+      * - ``on``
+
+        - The :binary:`~bin.mongos` instance supports hedged reads for
+          read operations whose :doc:`read preference
+          </core/read-preference>` have enabled the hedged read option.
+
+      * - ``off``
+
+        - The :binary:`~bin.mongos` instance does not support hedged
+          reads. That is, hedged reads are unavailable, even for read
+          operations whose read preference have enabled the hedged read
+          option.
+
+   For example, to turn off hedged read support for a
+   :binary:`~bin.mongos` instance, you can issue the following during
+   startup:
+
+   .. code-block:: sh
+
+      mongos --setParameter readHedgingMode=off
+
+   Or if using the :dbcommand:`setParameter` command in a
+   :binary:`~bin.mongo` shell connected to a running
+   :binary:`~bin.mongos`:
+   
+   .. code-block:: javascript
+
+      db.adminCommand( { setParameter: 1, readHedgingMode: "off" } )
+
+   .. seealso:: 
+   
+      - :ref:`mongos-hedged-reads`
+      
+      - :parameter:`maxTimeMSForHedgedReads`
+
 .. parameter:: replMonitorMaxFailedChecks
 
    *Available in MongoDB 3.2 only*
@@ -2243,7 +2547,7 @@ Sharding Parameters
 
    Default: 1
 
-   |mongos-only|
+   |both|
 
    Minimum number of outbound connections each TaskExecutor connection
    pool can open to any given :binary:`~bin.mongod` instance.
@@ -2253,6 +2557,19 @@ Sharding Parameters
    While the pool is idle, the pool maintains this number of
    connections until :parameter:`ShardingTaskExecutorPoolHostTimeoutMS`
    milliseconds pass without any application using that pool.
+
+   For a :binary:`~bin.mongos` using the
+   :parameter:`warmMinConnectionsInShardingTaskExecutorPoolOnStartup`
+   parameter, the ``ShardingTaskExecutorPoolMinSize`` parameter also
+   controls how many connections to each shard host are established on
+   startup of the :binary:`~bin.mongos` instance before it begins
+   accepting incoming client connections.
+
+   .. note::
+
+      In MongoDB 4.4, the
+      :parameter:`warmMinConnectionsInShardingTaskExecutorPoolOnStartup`
+      parameter is enabled by default for the :binary:`~bin.mongos`.
 
    You can only set this parameter during start-up and cannot change
    this setting using the :dbcommand:`setParameter` database command.
@@ -2265,7 +2582,8 @@ Sharding Parameters
    pools, where ``n`` is the number of cores. See
    :parameter:`taskExecutorPoolSize`.
 
-   .. seealso:: :parameter:`ShardingTaskExecutorPoolMaxSize`
+   .. seealso:: - :parameter:`ShardingTaskExecutorPoolMaxSize`
+                - :parameter:`warmMinConnectionsInShardingTaskExecutorPoolOnStartup`
 
 .. parameter:: ShardingTaskExecutorPoolRefreshRequirementMS
 
@@ -2438,6 +2756,99 @@ Sharding Parameters
 
       - :parameter:`ShardingTaskExecutorPoolMinSize`
 
+.. parameter:: loadRoutingTableOnStartup
+
+   .. versionadded:: 4.4
+
+   Type: boolean
+
+   *Default*: true
+
+   |mongos-only|
+
+   Configures a :binary:`~bin.mongos` instance to preload the routing
+   table for a sharded cluster on startup. With this setting
+   enabled, the :binary:`~bin.mongos` caches the cluster-wide routing
+   table for each sharded collection as part of its startup procedure,
+   before it begins accepting client connections.
+
+   Without this setting enabled, the :binary:`~bin.mongos` only loads
+   a routing table as needed for incoming client connections, and only
+   loads the specific routing table for the namespace of a given
+   request.
+
+   A :binary:`~bin.mongos` instance with the
+   :parameter:`loadRoutingTableOnStartup` parameter enabled may
+   experience longer startup times, but will result in faster servicing
+   of initial client connections once started.
+
+   :parameter:`loadRoutingTableOnStartup` is enabled by default.
+   
+   You can only set this parameter on startup, using either the
+   :setting:`setParameter` configuration file setting or the
+   :option:`--setParameter <mongos --setParameter>` command line option.
+
+.. parameter:: warmMinConnectionsInShardingTaskExecutorPoolOnStartup
+
+   .. versionadded:: 4.4
+
+   Type: boolean
+
+   *Default*: true
+
+   |mongos-only|
+
+   Configures a :binary:`~bin.mongos` instance to prewarm its connection
+   pool on startup. With this parameter enabled, the
+   :binary:`~bin.mongos` attempts to establish
+   :parameter:`ShardingTaskExecutorPoolMinSize` network
+   connections to each shard server as part of its startup procedure,
+   before it begins accepting client connections.
+
+   A timeout for this behavior can be configured with the
+   :parameter:`warmMinConnectionsInShardingTaskExecutorPoolOnStartupWaitMS`
+   parameter. If this timeout is reached, the :binary:`~bin.mongos` will
+   begin accepting client connections regardless of the size of its
+   connection pool.
+
+   A :binary:`~bin.mongos` instance with this parameter enabled may
+   experience longer startup times, but will result in faster servicing
+   of initial client connections once started.
+
+   :parameter:`warmMinConnectionsInShardingTaskExecutorPoolOnStartup` is
+   enabled by default.
+
+   You can only set this parameter on startup, using either the
+   :setting:`setParameter` configuration file setting or the
+   :option:`--setParameter <mongos --setParameter>` command line option.
+
+   .. seealso:: - :parameter:`warmMinConnectionsInShardingTaskExecutorPoolOnStartupWaitMS`
+                - :parameter:`ShardingTaskExecutorPoolMinSize`
+
+.. parameter:: warmMinConnectionsInShardingTaskExecutorPoolOnStartupWaitMS
+
+   .. versionadded:: 4.4
+
+   Type: integer
+
+   *Default*: 2000 (i.e. 2 seconds)
+
+   |mongos-only|
+
+   Sets the timeout threshold in milliseconds for a
+   :binary:`~bin.mongos` to wait for :parameter:`ShardingTaskExecutorPoolMinSize`
+   connections to be established per shard host when using the
+   :parameter:`warmMinConnectionsInShardingTaskExecutorPoolOnStartup`
+   parameter. If this timeout is reached, the :binary:`~bin.mongos` will
+   begin accepting client connections regardless of the size of its
+   connection pool.
+
+   You can only set this parameter on startup, using either the
+   :setting:`setParameter` configuration file setting or the
+   :option:`--setParameter <mongos --setParameter>` command line option.
+
+   .. seealso:: - :parameter:`warmMinConnectionsInShardingTaskExecutorPoolOnStartup`
+                - :parameter:`ShardingTaskExecutorPoolMinSize`
 
 .. parameter:: migrateCloneInsertionBatchDelayMS
 

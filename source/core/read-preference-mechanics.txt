@@ -19,6 +19,10 @@ replica set member to use or, when connected to multiple
 
 Server selection occurs once per operation.
 
+.. note::
+
+   .. include:: /includes/extracts/transactions-read-pref.rst
+
 .. index:: read preference; ping time
 .. index:: read preference; nearest
 .. index:: read preference; member selection
@@ -31,15 +35,8 @@ Read Preference for Replica Sets
 
 Server selection occurs once per operation and is governed by the
 :doc:`read preference </core/read-preference>` and ``localThresholdMS``
-settings.
-
-The read preference is re-evaluated for each operation.
-
-.. note::
-
-   .. include:: /includes/extracts/transactions-read-pref.rst
-
-.. include:: /includes/fact-3.4-added-maxStalenessSeconds.rst
+settings to determine member eligibility for reads. The read preference
+is re-evaluated for each operation.
 
 .. include:: /includes/extracts/server-selection-read-preference-replica-sets.rst
 
@@ -50,6 +47,8 @@ The read preference is re-evaluated for each operation.
 
 Read Preference for Sharded Clusters
 ------------------------------------
+
+.. _read-preference-mechanics-multiple-mongos:
 
 Load Balancing
 ~~~~~~~~~~~~~~
@@ -63,6 +62,8 @@ and the ``localThresholdMS``. The driver will load balance randomly
 across the :binary:`~bin.mongos` instances that fall within the latency
 window.
 
+.. _read-preference-mechanics-sharded-cluster:
+
 Read Preference and Shards
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -72,7 +73,27 @@ selection is governed by the :doc:`read preference
 </core/read-preference>` and :setting:`replication.localPingThresholdMs`
 settings. The read preference is re-evaluated for each operation.
 
-.. include:: /includes/fact-3.4-added-maxStalenessSeconds.rst
+Hedged Reads
+````````````
+
+Starting in version 4.4, :binary:`~bin.mongos` supports :ref:`hedged
+reads <mongos-hedged-reads>` for non-``primary`` :doc:`read preferences
+</core/read-preference>` modes. That is, :binary:`~bin.mongos` can send
+an additional read to another member, if available, to hedge the read
+operation if using non-``primary`` :doc:`read preferences
+</core/read-preference>`. The additional read sent to hedge the read
+operation uses the ``maxTimeMS`` value of
+:parameter:`maxTimeMSForHedgedReads`.
+
+.. include:: /includes/list-hedged-reads-operations.rst
+
+To use hedged reads:
+
+- the :binary:`~bin.mongos` must have enabled support for hedged reads
+  (Default). See the :parameter:`readHedgingMode` parameter.
+
+- Non-``primary`` :doc:`read preferences </core/read-preference>` must
+  enable use of hedged reads.
 
 .. include:: /includes/extracts/server-selection-read-preference-sharded-clusters.rst
 

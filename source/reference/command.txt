@@ -175,14 +175,6 @@ Query Plan Cache Commands
 
      - Lists the index filters for a collection.
 
-   * - :dbcommand:`planCacheListPlans`
-
-     - Displays the cached query plans for the specified query shape.
-
-   * - :dbcommand:`planCacheListQueryShapes`
-
-     - Displays the query shapes for which cached query plans exist.
-
    * - :dbcommand:`planCacheSetFilter`
 
      - Sets an index filter for a collection.
@@ -434,6 +426,13 @@ Sharding Commands
 
      - Associates a shard with a :term:`zone`. Supports configuring :ref:`zones <zone-sharding>` in sharded clusters.
 
+   * - :dbcommand:`balancerCollectionStatus`
+
+     - Returns information on whether the chunks of a sharded
+       collection are balanced.
+       
+       .. versionadded:: 4.4
+
    * - :dbcommand:`balancerStart`
 
      - Starts a balancer thread.
@@ -497,6 +496,13 @@ Sharding Commands
    * - :dbcommand:`mergeChunks`
 
      - Provides the ability to combine chunks on a single shard.
+
+   * - :dbcommand:`refineCollectionShardKey`
+
+     - Refines a collection's shard key by adding a suffix to the
+       existing key.
+
+       .. versionadded:: 4.4
 
    * - :dbcommand:`removeShard`
 
@@ -571,7 +577,7 @@ Administration Commands
 .. only:: website
 
 .. list-table::
-   :widths: 30,70
+   :widths: 30 70
    :header-rows: 1
 
    * - Name
@@ -642,6 +648,13 @@ Administration Commands
 
      - Unlocks one fsync lock.
 
+   * - :dbcommand:`getDefaultRWConcern`
+  
+     - Retrieves the global default read and write concern options 
+       for the deployment.
+
+       .. versionadded:: 4.4
+
    * - :dbcommand:`getParameter`
 
      - Retrieves configuration options.
@@ -682,9 +695,24 @@ Administration Commands
 
      - Enables or disables features that persist data that are backwards-incompatible.
 
+   * - :dbcommand:`setIndexCommitQuorum`
+
+     - Changes the minimum number of data-bearing members (i.e commit
+       quorum), including the primary, that must vote to commit an
+       in-progress :ref:`index build
+       <index-operations-replicated-build>` before the primary marks
+       those indexes as ready.
+
    * - :dbcommand:`setParameter`
 
      - Modifies configuration options.
+
+   * - :dbcommand:`setDefaultRWConcern`
+
+     - Sets the global default read and write concern options for the 
+       deployment. 
+
+       .. versionadded:: 4.4
 
    * - :dbcommand:`shutdown`
 
@@ -745,10 +773,6 @@ Diagnostic Commands
    * - :dbcommand:`dbStats`
 
      - Reports storage utilization statistics for the specified database.
-
-   * - :dbcommand:`diagLogging`
-
-     - Removed in MongoDB 3.6. To capture, replay, and profile commands sent to your MongoDB deployment, use :binary:`~bin.mongoreplay`.
 
    * - :dbcommand:`driverOIDTest`
 

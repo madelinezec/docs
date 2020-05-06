@@ -62,6 +62,11 @@ Conditional Expression Operators
 
 .. include:: /includes/extracts/agg-operators-conditional.rst
 
+Custom Aggregation Expression Operators
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. include:: /includes/extracts/agg-operators-custom-aggregation.rst
+
 Data Size Operators
 ~~~~~~~~~~~~~~~~~~~
 
@@ -107,6 +112,8 @@ Type Expression Operators
 
 .. include:: /includes/extracts/agg-operators-type.rst
 
+.. _agg-operators-group-accumulators:
+
 Accumulators (``$group``)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -146,10 +153,13 @@ Alphabetical Listing of Expression Operators
 
      - Returns the absolute value of a number.
 
+   * - :group:`$accumulator`
+
+     - Returns the result of a user-defined accumulator function.
+
    * - :expression:`$acos`
 
      - Returns the inverse cosine (arc cosine) of a value in radians.
-   
 
    * - :expression:`$acosh`
 
@@ -376,6 +386,11 @@ Alphabetical Listing of Expression Operators
 
      - Returns the largest integer less than or equal to the specified number.
    
+   * - :expression:`$function`
+
+     - Defines a custom aggregation function.
+
+       .. versionadded:: 4.4
 
    * - :expression:`$gt`
 
@@ -547,7 +562,8 @@ Alphabetical Listing of Expression Operators
 
    * - :expression:`$meta`
 
-     - Access text search metadata.
+     - Access available per-document metadata related to the
+       aggregation operation.
    
 
    * - :group:`$min`
@@ -933,6 +949,7 @@ Alphabetical Listing of Expression Operators
    :hidden: 
 
    /reference/operator/aggregation/abs
+   /reference/operator/aggregation/accumulator
    /reference/operator/aggregation/acos
    /reference/operator/aggregation/acosh
    /reference/operator/aggregation/add
@@ -972,6 +989,7 @@ Alphabetical Listing of Expression Operators
    /reference/operator/aggregation/first
    /reference/operator/aggregation/first-array-element
    /reference/operator/aggregation/floor
+   /reference/operator/aggregation/function
    /reference/operator/aggregation/gt
    /reference/operator/aggregation/gte
    /reference/operator/aggregation/hour

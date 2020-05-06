@@ -81,17 +81,17 @@ source_constants = {
     'version': version,
     'release': release,
     'pgp-version': version,
-    'pgp-fingerprint': 'E162F504A20CDF15827F718D4B7C549A058F8B6B',
-    'rsa-key': '4B7C549A058F8B6B',
-    'pgp-fingerprint-fmt': 'E162 F504 A20C DF15 827F  718D 4B7C 549A 058F 8B6B',
-    'windows-sha256': 'AF5AF79EFE540DCDDC2825A396C71FCFC4FEB463BC9CADDCCDE20AD126321CCC',
+    'pgp-fingerprint': '20691EEC35216C63CAF66CE1656408E390CFB1F5',
+    'rsa-key': '656408E390CFB1F5',
+    'pgp-fingerprint-fmt': '2069 1EEC 3521 6C63 CAF6  6CE1 6564 08E3 90CF B1F5',
+    'windows-sha256': 'BBF2662BF05D8CF2B796A9702CB82699AD0259796DD44D5FED1D818090431503',
     'pgp-short-fingerprint' : '0x4B7C549A058F8B6B',
     'source-available' : '`source available and free to use <https://github.com/mongodb/mongo/>`_'
 }
 
 
 extlinks = {
-    'hardlink' : ( 'http://docs.mongodb.com/{0}/%s'.format(conf.git.branches.current), ''),
+    'hardlink' : ( 'https://docs.mongodb.com/{0}/%s'.format(conf.git.branches.current), ''),
     'issue': ('https://jira.mongodb.org/browse/%s', '' ),
     'api': ('https://api.mongodb.com/%s', ''),
     'gettingstarted': ('https://docs.mongodb.com/getting-started%s', ''),
@@ -102,16 +102,16 @@ extlinks = {
     'opsmgr': ('https://docs.opsmanager.mongodb.com/current%s', ''),
     'atlas': ('https://docs.atlas.mongodb.com%s',''),
     'products': ('https://www.mongodb.com/products%s', ''),
-    'wtdocs': ('http://source.wiredtiger.com/mongodb-3.4%s', ''),
+    'wtdocs': ('https://source.wiredtiger.com/mongodb-3.4%s', ''),
     'perl-api': ('https://metacpan.org/pod/MongoDB::%s', ''),
-    'node-docs': ('http://mongodb.github.io/node-mongodb-native/3.3/%s', ''),
-    'node-api': ('http://mongodb.github.io/node-mongodb-native/3.3/api/%s', ''),
-    'ruby-api': ('http://api.mongodb.com/ruby/current/Mongo/%s', ''),
-    'scala-api': ('http://mongodb.github.io/mongo-scala-driver/2.0/scaladoc/org/mongodb/scala/MongoCollection.html#%s', ''),
+    'node-docs': ('https://mongodb.github.io/node-mongodb-native/3.3/%s', ''),
+    'node-api': ('https://mongodb.github.io/node-mongodb-native/3.3/api/%s', ''),
+    'ruby-api': ('https://api.mongodb.com/ruby/current/Mongo/%s', ''),
+    'scala-api': ('https://mongodb.github.io/mongo-scala-driver/2.0/scaladoc/org/mongodb/scala/MongoCollection.html#%s', ''),
     'csharp-api': ('https://api.mongodb.com/csharp/current/html/%s.htm', ''),
     'csharp-docs': ('https://mongodb.github.io/mongo-csharp-driver/2.4/reference/%s', ''),
-    'java-async-docs': ('http://mongodb.github.io/mongo-java-driver-reactivestreams/1.6/%s', ''),
-    'java-async-api': ('http://mongodb.github.io/mongo-java-driver-reactivestreams/1.6/javadoc/%s', ''),
+    'java-async-docs': ('https://mongodb.github.io/mongo-java-driver-reactivestreams/1.6/%s', ''),
+    'java-async-api': ('https://mongodb.github.io/mongo-java-driver-reactivestreams/1.6/javadoc/%s', ''),
     'go-api': ('https://godoc.org/github.com/mongodb/mongo-go-driver/%s', '')
 }
 
@@ -216,7 +216,7 @@ latex_elements = {
     'preamble': '\n'.join(latex_preamble_elements),
     'pointsize': '10pt',
     'papersize': 'letterpaper',
-    'tableofcontents': '\\textcopyright{ MongoDB, Inc. 2008 - 2016 } This work is licensed under a \href{http://creativecommons.org/licenses/by-nc-sa/3.0/us/}{Creative Commons Attribution-NonCommercial-ShareAlike 3.0 United States License}\\clearpage\\tableofcontents'
+    'tableofcontents': '\\textcopyright{ MongoDB, Inc. 2008 - 2016 } This work is licensed under a \href{https://creativecommons.org/licenses/by-nc-sa/3.0/us/}{Creative Commons Attribution-NonCommercial-ShareAlike 3.0 United States License}\\clearpage\\tableofcontents'
 }
 
 latex_paper_size = 'letter'

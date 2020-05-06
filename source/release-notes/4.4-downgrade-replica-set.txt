@@ -27,6 +27,7 @@ Downgrade Path
 
 .. include:: /includes/downgrade-path.rst
 
+.. include:: /includes/extracts/4.4-changes-downgrade-floor.rst
 
 Create Backup
 -------------
@@ -59,12 +60,12 @@ that are persisted and/or update incompatible configuration settings.
    .. include:: /includes/fact-collection-namespace-limit.rst
 
    Before downgrading, resolve any collections or views with namespaces
-   that exceed the :limit:`Namespace Length` limit.
+   that exceed the 120-byte :limit:`Namespace Length` limit for Feature
+   Compatibility Version (fCV) 4.2.
 
    To determine if you have any collections or views with namespaces
-   that exceed the :limit:`Namespace Length` limit if the Feature
-   Compatibility Version (fCV) is set to ``"4.2"``, connect
-   :binary:`~bin.mongo` shell to the primary and run:
+   that exceed the 120-byte limit, connect :binary:`~bin.mongo` shell
+   to the |target| and run:
 
    .. code-block:: javascript
 
@@ -140,6 +141,13 @@ The following steps are necessary only if fCV has ever been set to
 Remove all persisted |newversion| |features| that are incompatible with
 |oldversion|. These include:
 
+Compound Hashed Indexes
+  Remove all :ref:`compound hashed indexes 
+  <index-type-compound-hashed>`.
+
+  Use :method:`db.collection.getIndexes()` to identify 
+  any compound hashed indexes in a collection and use
+  :method:`db.collection.dropIndex()` to remove those indexes.
 
 .. |binary| replace:: any replica set member
 
@@ -150,7 +158,8 @@ Remove all persisted features that use |newversion| features. These
 include but are not limited to:
 
 - If any view definitions that include |newversion| operators, such as
-  :pipeline:`$unionWith`.
+  :pipeline:`$unionWith` or :expression:`$function`. See also
+  :ref:`4.4-rel-notes-new-agg-operators`.
 
 Procedure
 ---------

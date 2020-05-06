@@ -134,13 +134,14 @@ examples:
 	curl -SfL https://raw.githubusercontent.com/mongodb/node-mongodb-native/master/test/examples/query_array_of_documents.js              -o ${DRIVERS_PATH}/node_query_array_of_documents.js
 	curl -SfL https://raw.githubusercontent.com/mongodb/node-mongodb-native/master/test/examples/query_for_null_fields.js                 -o ${DRIVERS_PATH}/node_query_for_null_fields.js
 	curl -SfL https://raw.githubusercontent.com/mongodb/node-mongodb-native/master/test/examples/remove_documents.js                      -o ${DRIVERS_PATH}/node_remove.js
-	curl -SfL https://raw.githubusercontent.com/mongodb/node-mongodb-native/next/test/examples/transactions.js                            -o ${DRIVERS_PATH}/node_transactions.js
+	curl -SfL https://raw.githubusercontent.com/mongodb/node-mongodb-native/master/test/examples/transactions.js                            -o ${DRIVERS_PATH}/node_transactions.js
 	curl -SfL https://raw.githubusercontent.com/mongodb/node-mongodb-native/master/test/examples/update_documents.js                      -o ${DRIVERS_PATH}/node_update.js
 
 # ruby
 	curl -SfL https://raw.githubusercontent.com/mongodb/mongo-ruby-driver/master/spec/integration/shell_examples_spec.rb -o ${DRIVERS_PATH}/shell_examples_spec.rb
 	curl -SfL https://raw.githubusercontent.com/mongodb/mongo-ruby-driver/master/spec/integration/change_stream_examples_spec.rb -o ${DRIVERS_PATH}/change_stream_examples_spec.rb
 	curl -SfL https://raw.githubusercontent.com/mongodb/mongo-ruby-driver/master/spec/integration/transactions_examples_spec.rb -o ${DRIVERS_PATH}/transactions_examples_spec.rb
+	curl -SfL https://raw.githubusercontent.com/mongodb/mongo-ruby-driver/master/spec/integration/transactions_api_examples_spec.rb -o ${DRIVERS_PATH}/with_transactions_examples_spec.rb
 
 # scala
 	curl -SfL https://raw.githubusercontent.com/mongodb/mongo-scala-driver/master/driver/src/it/scala/org/mongodb/scala/DocumentationExampleSpec.scala -o ${DRIVERS_PATH}/DocumentationExampleSpec.scala
@@ -160,9 +161,15 @@ examples:
 
 # c++
 	curl -SfL https://raw.githubusercontent.com/mongodb/mongo-cxx-driver/master/src/mongocxx/test/transactions.cpp -o ${DRIVERS_PATH}/cpp-transactions.cpp 
+	curl -SfL https://raw.githubusercontent.com/mongodb/mongo-cxx-driver/master/examples/mongocxx/with_transaction.cpp -o ${DRIVERS_PATH}/cpp-with-transaction.cpp 
 
 # go
 	curl -SfL https://raw.githubusercontent.com/mongodb/mongo-go-driver/master/examples/documentation_examples/examples.go -o ${DRIVERS_PATH}/go_examples.go
+
+# swift
+
+	curl -SfL https://raw.githubusercontent.com/mongodb/mongo-swift-driver/master/Examples/Docs/Sources/AsyncExamples/main.swift -o ${DRIVERS_PATH}/swiftAsync.swift
+	curl -SfL https://raw.githubusercontent.com/mongodb/mongo-swift-driver/master/Examples/Docs/Sources/SyncExamples/main.swift -o ${DRIVERS_PATH}/swiftSync.swift
 
 changelogs:
 	python changelogs/generatechangelogs.py

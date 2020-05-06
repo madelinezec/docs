@@ -26,16 +26,8 @@ some performance impact while the procedure takes place.
 
 .. include:: /images/sharding-migrating.rst
 
-Starting in MongoDB 3.4, the balancer runs on the primary of the config
-server replica set (CSRS):
-
-- In version 3.4, when a balancer process is active, the primary of the
-  config server replica set acquires a "balancer lock" by modifying a
-  ``_id: "balancer"`` document in the :data:`~config.locks` collection
-  in the :ref:`config-database`. This "balancer lock" is never
-  released.
-
-- Starting in version 3.6, the balancer no longer takes a "lock".
+The balancer runs on the primary of the config server replica set
+(CSRS).
 
 .. toctree::
    :titlesonly: 
@@ -107,6 +99,11 @@ Window <sharding-schedule-balancing-window>` for details.
 
    .. include:: /includes/extracts/zoned-sharding-shard-operation-chunk-distribution.rst
 
+   .. include:: /includes/extracts/zoned-sharding-shard-operation-chunk-distribution-hashed-short.rst
+
+   See :ref:`pre-define-zone-range-hashed-example` for an example.
+
+
 Adding and Removing Shards from the Cluster
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -126,6 +123,8 @@ to the removed shard during this process.
 
 See the :doc:`/tutorial/remove-shards-from-cluster` tutorial for
 instructions on safely removing a shard from a cluster.
+
+.. seealso:: :method:`sh.balancerCollectionStatus()`
 
 .. _chunk-migration-procedure:
 
@@ -209,6 +208,8 @@ following thresholds:
 The balancer stops running on the target collection when the difference
 between the number of chunks on any two shards for that collection is *less
 than two*, or a chunk migration fails.
+
+.. seealso:: :method:`sh.balancerCollectionStatus()`
 
 .. _chunk-migration-queuing:
 .. _asynchronous-chunk-migration-cleanup:

@@ -62,6 +62,12 @@
                          },
                          "killPending" : <boolean>,
                          "numYields" : <number>,
+                         "dataThroughputLastSecond" : <number>, // Starting in MongoDB 4.4 for validate operations
+                         "dataThroughputAverage" : <number>,    // Starting in MongoDB 4.4 for validate operations
+                         "waitingForLatch" : {                   // Starting in MongoDB 4.2.2
+                             "timestamp" : <ISODate()>,
+                             "captureName" : <string>
+                         },
                          "locks" : {
                              "ParallelBatchWriterMode" : <string>,
                              "ReplicationStateTransition" : <string>,
@@ -195,6 +201,12 @@
                         },
                         "killPending" : <boolean>,
                         "numYields" : <number>,
+                        "dataThroughputLastSecond" : <number>, // Starting in MongoDB 4.4 for validate operations
+                        "dataThroughputAverage" : <number>,    // Starting in MongoDB 4.4 for validate operations
+                        "waitingForLatch" : {                   // Starting in MongoDB 4.2.2
+                             "timestamp" : <ISODate()>,
+                             "captureName" : <string>
+                         },
                         "locks" : {
                             "ParallelBatchWriterMode" : <string>,
                             "ReplicationStateTransition" : <string>,
@@ -353,6 +365,12 @@
                          },
                          "killPending" : <boolean>,
                          "numYields" : <number>,
+                         "dataThroughputLastSecond" : <number>, // Starting in MongoDB 4.4 for validate operations
+                         "dataThroughputAverage" : <number>,    // Starting in MongoDB 4.4 for validate operations
+                         "waitingForLatch" : {                   // Starting in MongoDB 4.2.2
+                             "timestamp" : <ISODate()>,
+                             "captureName" : <string>
+                         },
                          "locks" : {
                              "ParallelBatchWriterMode" : <string>,
                              "ReplicationStateTransition" : <string>,

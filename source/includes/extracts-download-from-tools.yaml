@@ -75,14 +75,6 @@ replacement:
   command: :binary:`~bin.mongotop`
   windows: "On Windows, the ``MSI`` installer includes all tools as part of the default installation."
 ---
-ref: download-from-tools-mongoreplay
-inherit:
-  file: extracts-download-from-tools.yaml
-  ref: _download-from-tools
-replacement:
-  command: :binary:`~bin.mongoreplay`
-  windows: "The ``mongoreplay`` tool is not available on Windows."
----
 ref: download-from-tools-mongoldap
 inherit:
   file: extracts-download-from-tools.yaml
@@ -90,6 +82,14 @@ inherit:
 replacement:
   command: :binary:`~bin.mongoldap`
   windows: "On Windows, the ``MSI`` installer for the Enterprise edition includes ``mongoldap`` as part of the default installation."
+---
+ref: download-from-tools-mongokerberos
+inherit:
+  file: extracts-download-from-tools.yaml
+  ref: _download-from-tools
+replacement:
+  command: :binary:`~bin.mongokerberos`
+  windows: "On Windows, the ``MSI`` installer for the Enterprise edition includes ``mongokerberos`` as part of the default installation."
 ---
 ref: download-from-tools-mongofiles
 inherit:

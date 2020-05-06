@@ -21,6 +21,68 @@ MongoDB 4.2 Released Aug 13, 2019
 Minor Releases
 --------------
 
+.. _4.2.6-release-notes:
+
+4.2.6 - Apr 21, 2020
+~~~~~~~~~~~~~~~~~~~~
+
+Issues fixed in 4.2.6:
+
+
+- :issue:`SERVER-45119`: CollectionShardingState::getCurrentShardVersionIfKnown returns collection version instead of shard version
+
+- :issue:`SERVER-44892`: getShardDistribution should use $collStats agg stage instead of collStats command
+
+- :issue:`SERVER-43848`: find/update/delete w/o shard key predicate under txn with snapshot read can miss documents
+
+- :issue:`SERVER-42827`: Allow sessions collection to return OK for creating indexes if at least one shard returns OK and others return CannotImplicitlyCreateCollection
+
+- :issue:`SERVER-40805`: Indicate the reason for replanning in the log file
+
+- :issue:`SERVER-45389`: Add metrics tracking how often shards have inconsistent indexes
+
+- :issue:`SERVER-44689`: Add serverStatus counter for each use of an aggregation stage in a user's request
+
+- `All JIRA issues closed in 4.2.6
+  <https://jira.mongodb.org/issues/?jql=project%20in%20(SERVER%2CTOOLS%2CWT)%20AND%20resolution%3D%27Fixed%27%20and%20fixversion%3D%274.2.6%27>`_
+
+- :ref:`4.2.6-changelog`
+
+.. _4.2.5-release-notes:
+
+4.2.5 - Mar 26, 2020
+~~~~~~~~~~~~~~~~~~~~
+
+.. note::
+
+    The release of version 4.2.4 was skipped due to an issue
+    encountered during the release. However, the 4.2.5 release includes
+    the fixes made in 4.2.4.
+
+Issues fixed in 4.2.5:
+
+- :issue:`SERVER-45770`: Add to information contained in logfile about "moveChunk.to"
+
+- `All JIRA issues closed in 4.2.5
+  <https://jira.mongodb.org/issues/?jql=project%20in%20(SERVER%2CTOOLS%2CWT)%20AND%20resolution%3D%27Fixed%27%20and%20fixversion%3D%274.2.5%27>`_
+
+- :ref:`4.2.5-changelog`
+
+Issues fixed in 4.2.4:
+
+- :issue:`SERVER-44915`: Extend $indexStats output to include full index options and shard name
+- :issue:`SERVER-46121`: mongos crashes with invariant error after changing taskExecutorPoolSize
+- :issue:`SERVER-45137`: Increasing memory allocation in Top::record with high rate of collection creates and drops
+- :issue:`SERVER-44904`: Startup recovery should not delete corrupt documents while rebuilding unfinished indexes
+- :issue:`SERVER-44260`: Transaction can conflict with previous transaction on the session if the all committed point is held back
+- :issue:`SERVER-35050`: Don't abort collection clone due to negative document count
+- :issue:`SERVER-39112`: Primary drain mode can be unnecessarily slow
+
+- `All JIRA issues closed in 4.2.4
+  <https://jira.mongodb.org/issues/?jql=project%20in%20(SERVER%2CTOOLS%2CWT)%20AND%20resolution%3D%27Fixed%27%20and%20fixversion%3D%274.2.4%27>`_
+
+- :ref:`4.2.4-changelog`
+
 
 .. _4.2.3-release-notes:
 
@@ -58,6 +120,7 @@ Issues fixed:
 - :issue:`SERVER-43882`: Building indexes for startup recovery uses unowned RecordData after yielding its cursor
 - :issue:`SERVER-44617`: $regexFind crash when one of the capture group doesn't match the input but pattern matches
 - :issue:`SERVER-44721`: Shell KMS AWS support cannot decrypt responses
+- :issue:`SERVER-43860`: Pipeline style update in $merge can produce unexpected result
 - :issue:`WT-4961`: Checkpoints with cache overflow must keep history for reads
  
 - `All JIRA issues closed in 4.2.2
