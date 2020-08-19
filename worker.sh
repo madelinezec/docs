@@ -1,1 +1,1 @@
-"build-and-stage-next-gen-html"
+"build-and-stage-next-gen"
